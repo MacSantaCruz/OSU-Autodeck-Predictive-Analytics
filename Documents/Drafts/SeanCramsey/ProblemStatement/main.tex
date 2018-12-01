@@ -1,0 +1,77 @@
+\documentclass[onecolumn, draftclsnofoot,10pt, compsoc]{IEEEtran}
+\usepackage{url}
+\usepackage{setspace}
+\usepackage{listings}
+
+
+% Our packages
+\usepackage{longtable}
+\usepackage{cite}
+\usepackage{geometry}
+\geometry{textheight=9.5in, textwidth=7in}
+
+% Our settings TODO?
+\lstset{basicstyle=\ttfamily}
+
+% 1. Fill in these details
+\def \GroupNumber{ 45}
+\def \GroupMemberOne{Sean Cramsey}
+\def \ProjectName{Problem Statement - Draft}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\begin{titlepage}
+    \pagenumbering{gobble}
+    \begin{singlespace}
+        \hfill 
+        \par\vspace{.2in}
+        \centering
+        \scshape{
+            \huge CS461 \par
+            {\large\today\\Fall 2018}\par
+            \vspace{.5in}
+            \textbf{\Huge\ProjectName}\par
+            \vfill
+            %{\large Created by }\par
+            Group\GroupNumber\par
+            \vspace{5pt}
+            {\Large
+                \GroupMemberOne\par
+            }
+            \vspace{20pt}
+    
+        }
+        \begin{abstract}
+            This draft contains a problem statement, problem definition, possible proposed solutions and possible performance metrics for the Capstone project of group 45.
+        \end{abstract}
+    \end{singlespace}
+\end{titlepage}
+\newpage
+\pagenumbering{arabic}
+%\tableofcontents
+% 7. uncomment this (if applicable). Consider adding a page break.
+%\listoffigures
+%\listoftables
+\clearpage
+
+%\section{Problem Abstract}
+    
+\section{Problem Definition \& Description of Problem}
+
+In the use of any production level software, it is important that the design of its user interface and the tools available provide competent users with the means to quickly iterate on their projects.  By aggregating usage data across large sets of users we can intelligently modify the interface of a development tool to provide a globally superior experience.  
+
+However, while this may suit the "global average," it tends to alienate users whose work-flows deviate at some degree from the average.  This in addition to the space limitations of the workspace can lead to periods of downtime in an individual's work cycle, where time is wasted navigating menus and learning or rebinding keyboard shortcuts. 
+
+\section{Proposed Solution}
+
+We intend to develop an general use API which offers a machine learning solution to this issue. By analyzing local user data we hope that a custom predictive toolset will emerge that will save users time by eliminating the need to navigate the UI in its full depth to accomplish repetitive tasks.  We hope that such a system will be able to increase the productivity of regular users.  
+
+\section{Performance Metrics}
+
+Our goal for the system is to improve productivity and ease of use for regular users, and that this solution be easily applicable to other software produced by the client.
+
+\nocite{*}
+%\bibliographystyle{IEEEtran}
+%\bibliography{references}
+
+\end{document}

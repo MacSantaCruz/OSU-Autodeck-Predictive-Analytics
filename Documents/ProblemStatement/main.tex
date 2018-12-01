@@ -1,0 +1,94 @@
+\documentclass[onecolumn, draftclsnofoot,10pt, compsoc]{IEEEtran}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{setspace}
+
+\usepackage{geometry}
+\geometry{textheight=9.5in, textwidth=7in}
+
+% 1. Fill in these details
+\def \CapstoneTeamName{		}
+\def \CapstoneTeamNumber{		45}
+\def \GroupMemberOne{			Blake Hudson}
+\def \GroupMemberTwo{			McIntyre Santa Cruz}
+\def \GroupMemberThree{			Sean Cramsey}
+\def \CapstoneProjectName{		Inventor Command Predictive Analytics}
+\def \CapstoneSponsorCompany{	Autodesk, Inc}
+\def \CapstoneSponsorPerson{		Andrew Faix}
+
+% 2. Uncomment the appropriate line below so that the document type works
+\def \DocType{		Problem Statement
+				%Requirements Document
+				%Technology Review
+				%Design Document
+				%Progress Report
+				}
+			
+\newcommand{\NameSigPair}[1]{\par
+\makebox[2.75in][r]{#1} \hfil 	\makebox[3.25in]{\makebox[2.25in]{\hrulefill} \hfill		\makebox[.75in]{\hrulefill}}
+\par\vspace{-12pt} \textit{\tiny\noindent
+\makebox[2.75in]{} \hfil		\makebox[3.25in]{\makebox[2.25in][r]{Signature} \hfill	\makebox[.75in][r]{Date}}}}
+% 3. If the document is not to be signed, uncomment the RENEWcommand below
+%\renewcommand{\NameSigPair}[1]{#1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\begin{titlepage}
+    \pagenumbering{gobble}
+    \begin{singlespace}
+    	\includegraphics[height=4cm]{coe_v_spot1}
+        \hfill 
+        % 4. If you have a logo, use this includegraphics command to put it on the coversheet.
+        %\includegraphics[height=4cm]{CompanyLogo}   
+        \par\vspace{.2in}
+        \centering
+        \scshape{
+            \huge CS Capstone \DocType \par
+            {\large\today}\par
+            \vspace{.5in}
+            \textbf{\Huge\CapstoneProjectName}\par
+            \vfill
+            {\large Prepared for}\par
+            \Huge \CapstoneSponsorCompany\par
+            \vspace{5pt}
+            {\Large\NameSigPair{\CapstoneSponsorPerson}\par}
+            {\large Prepared by }\par
+            Group\CapstoneTeamNumber\par
+            % 5. comment out the line below this one if you do not wish to name your team
+            \CapstoneTeamName\par 
+            \vspace{5pt}
+            {\Large
+                \NameSigPair{\GroupMemberOne}\par
+                \NameSigPair{\GroupMemberTwo}\par
+                \NameSigPair{\GroupMemberThree}\par
+            }
+            \vspace{20pt}
+        }
+        \begin{abstract}
+        % 6. Fill in your abstract    
+        	 Autodesk has set out to improve user productivity within their Inventor software. With the agreement of its users, Autodesk has acquired data regarding user inputs including individual key presses and mouse travel. With this data, the team has set out to analyze the information and create a system able to predict a users next input/selection. This process will include creating a potential walk that the user is most likely to take. Reduced key inputs and mouse travel to achieve the same output will be the main source measuring success. The system will have to work on generating commands based on the last input given. With this achieved, the application will then visually give the user the option to quickly select this generated command. Having accomplished this task, users will be able to complete projects quicker and with less keystrokes/mouse travel.  (\url{https://tobi.oetiker.ch/lshort/lshort.pdf})
+        \end{abstract}     
+    \end{singlespace}
+\end{titlepage}
+\newpage
+\pagenumbering{arabic}
+\tableofcontents
+% 7. uncomment this (if applicable). Consider adding a page break.
+%\listoffigures
+%\listoftables
+\clearpage
+
+% 8. now you write!
+\section{Definition of Problem}
+
+Autodesk would like to improve user productivity on their Inventor software. The software in question is a CAD system which allows for 3D mechanical design and simulation. A software of this magnitude must support many design options, which in turn must be mapped to specific keystrokes and clicks. In many cases, for a user to accomplish some process within Inventor, it will take multiple keys being pressed in orderly succession to get the desired result. For a period of time now, Autodesk has been collecting data on user inputs with the hope that trends can be found within these key selections which could lead to design changes on the software itself. Autodesk would like to prove to their customers that the data has been put to good use, and that it was not an empty promise made by the company to deliver improvements based on the information collected. The solution to this problem not only needs to appeal to new users, it must also satisfy the existing user base of Inventor. One of the highlighted reasons for addressing these problems, is to prove that the current user base is appreciated and that data they have allowed to be collected has been put to good use. 
+
+\section{Proposed Solution}
+
+In order to improve usability and productivity of users of the Inventor software, a next command suggestion will be added to the user interface. This will occur when a user makes some sort of input within the inventor environment where more options must, or can, be selected for. To make use of resources already collected, user input data, analysis must be run in order to build a system which synthesizes tendencies. The largest piece that will be seized upon will be pairs of keystrokes. Those which occur frequently and in congress with one another will be recorded. From this, entire branches will be created that will attempt to predict a users choices. A machine learning approach will be adopted and the system will be trained to make a best guess at what a user will quickly want to select in order to get their project done. As the software gets used more and more, the system will get better at predicting the next command. Suggestions must appear nearly instantaneously and the system itself must not get backed up if the user is quicker then the suggestions. C++ will be the main language used in development of this project. The existing Inventor API will be used to develop an add-in that will be the final product of this project. Third party machine learning tools will be used in order to accomplish the goals that have been established. 
+
+\section{Performance Metrics}
+
+A numerical approach to prove an achievement of our goals can be established. For one, the number of keystrokes required to complete the same task will be lower if the project has been successful. This would also suggest that the time spent completing a task/project should be recorded as taking less time than previously where their had been no suggestion. On top of this, the suggestion feature should be one of, if not, the largest number of selected commands during the use of the Inventor application. No change in the numbers collected would reflect poor suggestions by the system and would require further changes to how commands are selected. An increase in the number of inputs would be the largest failure, possibly due to poor user interface integration. A presentation will be required by Autodesk and a working prototype will be expected to be the focal point of the review.
+
+\end{document}
