@@ -12,7 +12,7 @@ logs_path = '/tmp/tensorflow/rnn_words'
 writer = tf.summary.FileWriter(logs_path)
 
 # Text file containing words for training
-training_file = 'testSave.txt'
+training_file = 'test2_5000'
 
 def read_data(fname):
     with open(fname) as f:
@@ -37,9 +37,9 @@ dictionary, reverse_dictionary = build_dataset(training_data)
 vocab_size = len(dictionary)
 
 # Parameters
-learning_rate = 0.001
-training_iters = 100
-display_step = 1000
+learning_rate = 0.01
+training_iters = 50000
+display_step = 500
 n_input = 1
 
 # number of units in RNN cell
@@ -103,7 +103,10 @@ with tf.Session() as session:
     loss_total = 0
 
     writer.add_graph(session.graph)
-    saver.restore(session, "/tmp/model.ckpt")
+    try:
+        saver.restore(session, "./tmp/model.ckpt")
+    except:
+        print("No Model Loaded")
     while step < training_iters:
         # Generate a minibatch. Add some randomness on selection process.
         if offset > (len(training_data)-end_offset):
@@ -124,19 +127,20 @@ with tf.Session() as session:
             print("Iter= " + str(step+1) + ", Average Loss= " + \
                   "{:.6f}".format(loss_total/display_step) + ", Average Accuracy= " + \
                   "{:.2f}%".format(100*acc_total/display_step))
-            if 100*acc_total/display_step > 95:
+            if 100*acc_total/display_step > 5:
                 step = training_iters
             acc_total = 0
             loss_total = 0
             symbols_in = [training_data[i] for i in range(offset, offset + n_input)]
             symbols_out = training_data[offset + n_input]
             symbols_out_pred = reverse_dictionary[int(tf.argmax(onehot_pred, 1).eval())]
-            print("%s - [%s] vs [%s]" % (symbols_in,symbols_out,symbols_out_pred))
+            #print("%s - [%s] vs [%s]" % (symbols_in,symbols_out,symbols_out_pred))
         step += 1
         offset += (n_input+1)
-    save_path = saver.save(session, "/tmp/model.ckpt")
+    save_path = saver.save(session, "./tmp/model.ckpt")
     while True:
-        prompt = "%s words: " % n_input
+        #prompt = "%s words: " % n_input
+        prompt = "Enter Word: "
         sentence = input(prompt)
         sentence = sentence.strip()
         words = sentence.split(' ')
