@@ -12,7 +12,7 @@ logs_path = '/tmp/tensorflow/rnn_words'
 writer = tf.summary.FileWriter(logs_path)
 
 # Text file containing words for training
-training_file = 'testInput.txt'
+training_file = 'testSave.txt'
 
 def read_data(fname):
     with open(fname) as f:
@@ -38,9 +38,9 @@ vocab_size = len(dictionary)
 
 # Parameters
 learning_rate = 0.001
-training_iters = 10000
+training_iters = 100
 display_step = 1000
-n_input = 3
+n_input = 1
 
 # number of units in RNN cell
 n_hidden = 512
@@ -91,6 +91,8 @@ accuracy = tf.reduce_mean(tf.cast(correct_pred, tf.float32))
 # Initializing the variables
 init = tf.global_variables_initializer()
 
+saver = tf.train.Saver()
+
 # Launch the graph
 with tf.Session() as session:
     session.run(init)
@@ -101,7 +103,7 @@ with tf.Session() as session:
     loss_total = 0
 
     writer.add_graph(session.graph)
-
+    saver.restore(session, "/tmp/model.ckpt")
     while step < training_iters:
         # Generate a minibatch. Add some randomness on selection process.
         if offset > (len(training_data)-end_offset):
@@ -132,7 +134,7 @@ with tf.Session() as session:
             print("%s - [%s] vs [%s]" % (symbols_in,symbols_out,symbols_out_pred))
         step += 1
         offset += (n_input+1)
-
+    save_path = saver.save(session, "/tmp/model.ckpt")
     while True:
         prompt = "%s words: " % n_input
         sentence = input(prompt)
