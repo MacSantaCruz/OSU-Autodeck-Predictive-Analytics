@@ -7,12 +7,124 @@ import random
 import collections
 import time
 
+import sys
+from threading import Thread, Lock
+import win32pipe, win32file, pywintypes
+
+TENSOR_STREAM = "\\\\.\\pipe\\TENSORFLOW_DATA_STREAM"
+ADDIN_STREAM = "\\\\.\\pipe\\ADDIN_DATA_STREAM"
+
+quit = False
+iCommand = [] #queue for commands, in the case the come in faster than the lstm can process
+oCommand = "" #only need the last output
+iMutex = Lock()
+oMutex = Lock()
+
+#reads data from addin
+def Read():
+    global quit
+    hPipeR = win32file.INVALID_HANDLE_VALUE
+    hPipeR = win32pipe.CreateNamedPipe(
+        ADDIN_STREAM,
+        win32pipe.PIPE_ACCESS_DUPLEX,
+        win32pipe.PIPE_TYPE_BYTE | win32pipe.PIPE_READMODE_BYTE | win32pipe.PIPE_WAIT,
+        1,
+        1024,
+        1024,
+        0,
+        None)
+    while hPipeR != win32file.INVALID_HANDLE_VALUE and not quit:
+        try:
+            print("waiting for client")
+            sys.stdout.flush()
+            win32pipe.ConnectNamedPipe(hPipeR, None)
+            print("got client")
+            sys.stdout.flush()
+            while True:
+                resp,data = win32file.ReadFile(hPipeR, 1024, None)
+                data = data.decode('utf-8')
+                data = data.replace('\n','').replace('\x00','')
+                #make this available to the prediction
+                iMutex.acquire()
+                iCommand.append(data)
+                print(iCommand)
+                sys.stdout.flush()
+                iMutex.release()
+        except pywintypes.error as e:
+            if e.args[0] == 2:
+                print("no pipe, trying again")
+                sys.stdout.flush()
+                time.sleep(1)
+            elif e.args[0] == 109:
+                print("broken pipe")
+                sys.stdout.flush()
+                quit = True
+        finally:
+            win32pipe.DisconnectNamedPipe(hPipeR)
+    win32file.CloseHandle(hPipeR)
+    print("PY - Read Stream Closed")
+    sys.stdout.flush()
+
+#Sends data to Inventor Addin, one command at a time
+def Write():
+    global quit
+    hPipeW = win32file.INVALID_HANDLE_VALUE
+    while not quit:
+        try:
+            hPipeW = win32file.CreateFile(
+                TENSOR_STREAM,
+                win32file.GENERIC_READ | win32file.GENERIC_WRITE,
+                0,
+                None,
+                win32file.OPEN_EXISTING,
+                0,
+                None)
+            while not quit:
+                #constantly sends last command, or list of
+                #print("sending " + oCommand)
+                sys.stdout.flush()
+                data = str.encode(oCommand)
+                win32file.WriteFile(
+				    hPipeW,
+				    data
+			    )
+                #if data = 'q':
+                #    quit = True
+        except pywintypes.error as e:
+            if e.args[0] == 2:
+                print("no pipe, trying again")
+                sys.stdout.flush()
+                time.sleep(1)
+            elif e.args[0] == 109:
+                print("broken pipe")
+                sys.stdout.flush()
+                quit = True
+
+    win32file.CloseHandle(hPipeW)
+    print("PY - Write Stream Closed")
+    sys.stdout.flush()
+
+#initalize threads
+try:
+    w = Thread(name="Writer", target=Write)
+    w.start()
+except:
+    print("Server Thread Error")
+    sys.stdout.flush()
+
+try:
+    r = Thread(name="Reader", target=Read)
+    r.start()
+except:
+    print("Client Thread Error")
+    sys.stdout.flush()
+
 # Target log path
 logs_path = '/tmp/tensorflow/rnn_words'
 writer = tf.summary.FileWriter(logs_path)
 
 # Text file containing words for training
-training_file = 'testInput.txt'
+training_file = 'test2_5000'
 
 def read_data(fname):
     with open(fname) as f:
@@ -24,6 +136,7 @@ def read_data(fname):
 
 training_data = read_data(training_file)
 print("Loaded training data...")
+sys.stdout.flush()
 
 def build_dataset(words):
     count = collections.Counter(words).most_common()
@@ -37,10 +150,10 @@ dictionary, reverse_dictionary = build_dataset(training_data)
 vocab_size = len(dictionary)
 
 # Parameters
-learning_rate = 0.001
-training_iters = 10000
-display_step = 1000
-n_input = 3
+learning_rate = 0.01
+training_iters = 50000
+display_step = 500
+n_input = 1
 
 # number of units in RNN cell
 n_hidden = 512
@@ -91,6 +204,9 @@ accuracy = tf.reduce_mean(tf.cast(correct_pred, tf.float32))
 # Initializing the variables
 init = tf.global_variables_initializer()
 
+saver = tf.train.Saver()
+
+output = ""
 # Launch the graph
 with tf.Session() as session:
     session.run(init)
@@ -101,7 +217,11 @@ with tf.Session() as session:
     loss_total = 0
 
     writer.add_graph(session.graph)
-
+    try:
+        saver.restore(session, "./tmp/model.ckpt")
+    except:
+        print("No Model Loaded")
+        sys.stdout.flush()
     while step < training_iters:
         # Generate a minibatch. Add some randomness on selection process.
         if offset > (len(training_data)-end_offset):
@@ -122,20 +242,30 @@ with tf.Session() as session:
             print("Iter= " + str(step+1) + ", Average Loss= " + \
                   "{:.6f}".format(loss_total/display_step) + ", Average Accuracy= " + \
                   "{:.2f}%".format(100*acc_total/display_step))
-            if 100*acc_total/display_step > 95:
+            sys.stdout.flush()
+            if 100*acc_total/display_step > 5:
                 step = training_iters
             acc_total = 0
             loss_total = 0
             symbols_in = [training_data[i] for i in range(offset, offset + n_input)]
             symbols_out = training_data[offset + n_input]
             symbols_out_pred = reverse_dictionary[int(tf.argmax(onehot_pred, 1).eval())]
-            print("%s - [%s] vs [%s]" % (symbols_in,symbols_out,symbols_out_pred))
+            #print("%s - [%s] vs [%s]" % (symbols_in,symbols_out,symbols_out_pred))
         step += 1
         offset += (n_input+1)
-
+    #save_path = saver.save(session, "./tmp/model.ckpt")
     while True:
-        prompt = "%s words: " % n_input
-        sentence = input(prompt)
+        iMutex.acquire()
+        if iCommand == []:
+            iMutex.release()
+            continue;
+        #prompt = "%s words: " % n_input
+        #prompt = "Enter Word: "
+        #pipe input here
+        sentence = iCommand[0]
+        iCommand.pop(0)
+        #sentence = input(prompt)
+        iMutex.release()
         sentence = sentence.strip()
         words = sentence.split(' ')
         if len(words) != n_input:
@@ -146,9 +276,16 @@ with tf.Session() as session:
                 keys = np.reshape(np.array(symbols_in_keys), [-1, n_input, 1])
                 onehot_pred = session.run(pred, feed_dict={x: keys})
                 onehot_pred_index = int(tf.argmax(onehot_pred, 1).eval())
-                sentence = "%s %s" % (sentence,reverse_dictionary[onehot_pred_index])
+                #sentence = "%s %s" % (sentence,reverse_dictionary[onehot_pred_index])
+                output = "%s" % (reverse_dictionary[onehot_pred_index])
                 symbols_in_keys = symbols_in_keys[1:]
                 symbols_in_keys.append(onehot_pred_index)
-            print(sentence)
+            #pipe out here
+            #oMutex.acquire()
+            oCommand = output
+            print(oCommand)
+            sys.stdout.flush()
+            #oMutex.release()
         except:
             print("Word not in dictionary")
+            sys.stdout.flush()
