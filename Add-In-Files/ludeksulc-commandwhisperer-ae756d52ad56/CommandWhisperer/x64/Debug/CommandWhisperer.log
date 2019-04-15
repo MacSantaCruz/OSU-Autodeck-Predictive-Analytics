@@ -1,0 +1,34 @@
+﻿D:\Capstone\OSU-Autodeck-Predictive-Analytics\Add-In-Files\ludeksulc-commandwhisperer-ae756d52ad56\CommandWhisperer\CommandWhisperer.vcxproj(106,5): warning MSB4011: "C:\Users\Sean\AppData\Local\Microsoft\MSBuild\v4.0\Microsoft.Cpp.x64.user.props" cannot be imported again. It was already imported at "D:\Capstone\OSU-Autodeck-Predictive-Analytics\Add-In-Files\ludeksulc-commandwhisperer-ae756d52ad56\CommandWhisperer\CommandWhisperer.vcxproj (94,5)". This is most likely a build authoring error. This subsequent import will be ignored. 
+  64 bit Processing .\CommandWhisperer.idl
+  CommandWhisperer.idl
+  64 bit Processing C:\Program Files (x86)\Windows Kits\8.1\Include\um\oaidl.idl
+  oaidl.idl
+  64 bit Processing C:\Program Files (x86)\Windows Kits\8.1\Include\um\objidl.idl
+  objidl.idl
+  64 bit Processing C:\Program Files (x86)\Windows Kits\8.1\Include\um\unknwn.idl
+  unknwn.idl
+  64 bit Processing C:\Program Files (x86)\Windows Kits\8.1\Include\shared\wtypes.idl
+  wtypes.idl
+  64 bit Processing C:\Program Files (x86)\Windows Kits\8.1\Include\shared\wtypesbase.idl
+  wtypesbase.idl
+  64 bit Processing C:\Program Files (x86)\Windows Kits\8.1\Include\shared\basetsd.h
+  basetsd.h
+  64 bit Processing C:\Program Files (x86)\Windows Kits\8.1\Include\shared\guiddef.h
+  guiddef.h
+  64 bit Processing C:\Program Files (x86)\Windows Kits\8.1\Include\um\ocidl.idl
+  ocidl.idl
+  64 bit Processing C:\Program Files (x86)\Windows Kits\8.1\Include\um\oleidl.idl
+  oleidl.idl
+  64 bit Processing C:\Program Files (x86)\Windows Kits\8.1\Include\um\servprov.idl
+  servprov.idl
+  64 bit Processing C:\Program Files (x86)\Windows Kits\8.1\Include\um\urlmon.idl
+  urlmon.idl
+  64 bit Processing C:\Program Files (x86)\Windows Kits\8.1\Include\um\msxml.idl
+  msxml.idl
+  64 bit Processing C:\Program Files (x86)\Windows Kits\8.1\Include\um\oaidl.acf
+  oaidl.acf
+  64 bit Processing C:\Program Files (x86)\Windows Kits\8.1\Include\um\ocidl.acf
+  ocidl.acf
+  StdAfx.cpp
+       Compiling MFC in Debug mode.
+d:\capstone\osu-autodeck-predictive-analytics\add-in-files\ludeksulc-commandwhisperer-ae756d52ad56\commandwhisperer\stdafx.h(88): fatal error C1083: Cannot open include file: 'InventorUtils.h': No such file or directory

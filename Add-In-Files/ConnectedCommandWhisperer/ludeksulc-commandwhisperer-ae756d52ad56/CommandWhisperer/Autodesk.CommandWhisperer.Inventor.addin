@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Addin Type="Standard">
+    <!--Created for Autodesk Inventor Version 24.0-->
+    <ClassId>{78FA6571-1D45-41E2-92E8-F80A1E4CD4A1}</ClassId>
+    <ClientId>{78FA6571-1D45-41E2-92E8-F80A1E4CD4A1}</ClientId>   
+    <DisplayName>CommandWhispererAddInServer</DisplayName>
+    <Description></Description>
+    <Assembly>CommandWhisperer.dll</Assembly>
+                <LoadOnStartUp>1</LoadOnStartUp>
+        <UserUnloadable>1</UserUnloadable>
+    <Hidden>0</Hidden>
+    <SupportedSoftwareVersionGreaterThan>23..</SupportedSoftwareVersionGreaterThan>
+    <DataVersion>1</DataVersion>
+    <UserInterfaceVersion>1</UserInterfaceVersion>
+  </Addin>
