@@ -1,6 +1,13 @@
 # OSU-Autodeck-Predictive-Analytics
 This project must increase productivity of a daily, experienced user of Autodesk Inventor. This is accomplished by evaluating individual user command usage, identifying command patterns from the data pool, recognize users command sequence and present recommended, next-command options in an easily-accessible UI
 
+##Python Setup
+  1. Install python 3.6.8 to your windows machine with pip https://www.python.org/downloads/windows/
+  2. chmod and run ./pyDependencies (or manually install components using pip{
+      pip install --upgrade tensorflow
+      pip install pywin32
+    })
+
 ##Start up guide
   1. Install Autodesk Inventor Professional 2019
   2. pull master branch
@@ -18,3 +25,7 @@ This project must increase productivity of a daily, experienced user of Autodesk
   14. the Dialog window should update, listing "commandName, PRED: predictedCommand"
   15. the console window running lmst.py will also update showing the commandName and predictedCommand
   16. Close Inventor FIRST before closing/CTRL+C-ing the lmst window.
+
+
+
+NOTE: current build is working off of poor data. It may appear that it has been programmed to only predict a couple commands in particular the delete command and rotate. These happen to be the most frequently used commands in our training data. The system itself is in place, more time needs to be placed on cleaning the data or the data collected given to us by the client will need to improve.
