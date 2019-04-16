@@ -17,7 +17,7 @@ This project must increase productivity of a daily, experienced user of Autodesk
   6. In the opening screen navigate to the "Tools" tab, click on the Add-Ins option. This will open the Add-In manager window.  Find "CommandWhispererAddInServer" in the menu.  Check that its load behavior is "Automatic / Loaded". If it is not, check the "Load Automatically" box and if the Addin is not loaded check the Loaded/Unloaded.
   7. Open a command console (VS Developer Command Prompt ,git bash, etc.). cd into "OSU-Autodeck-Predictive-Analytics\Add-In-Files\ConnectedCommandWhisperer\LSTM files\"
   8. run "python lmst.py"
-  9. watch the command console, it should print "got client" if it successfully connects to Inventor
+  9. watch the command console, it should print "got client" if it successfully connects to Inventor.  Wait for the line "Iter= 500, Average Loss=..." to be displayed, this lets you know that the model has been trained (See NOTE)
   10. Back in Inventor click the "Drawing tab" to open a new drawing.
   11. in the header (File, Place View, Annotate, etc.) click Add-Ins. You should Command Whisperer, click on the text.  Clicking that will open a dialog box.
   12. Click the header item "Sketch"
