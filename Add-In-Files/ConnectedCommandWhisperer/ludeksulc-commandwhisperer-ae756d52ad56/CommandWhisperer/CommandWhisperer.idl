@@ -1,0 +1,44 @@
+//-----------------------------------------------------------------------------
+//----- CommandWhisperer.idl : IDL source for CommandWhisperer.dll
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+//----- This file will be processed by the MIDL tool to
+//----- produce the type library (CommandWhisperer.tlb) and marshalling code.
+import "oaidl.idl";
+import "ocidl.idl";
+
+	[
+		object,
+		uuid(180FBA41-080D-4858-BBB8-725BCDFA13E7),
+		dual,
+		helpstring("ICommandWhispererAddInServer Interface"),
+		pointer_default(unique)
+	]
+	interface ICommandWhispererAddInServer : IDispatch
+	{
+		[id(0x03001201)] HRESULT Activate([in] IDispatch * pDisp, [in] VARIANT_BOOL FirstTime);
+		[id(0x03001202)] HRESULT Deactivate();
+		[id(0x03001203)] HRESULT ExecuteCommand([in] long CommandID);
+		[propget, id(0x03001204)] HRESULT Automation([out, retval] IDispatch * * Result);
+	};
+
+[
+	uuid(5EE36898-1A7D-4183-A861-9B32E28C0AA7),
+	version(1.0),
+	helpstring("CommandWhisperer 1.0 Type Library")
+]
+library CommandWhispererLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	[
+		uuid(78FA6571-1D45-41E2-92E8-F80A1E4CD4A1),
+		helpstring("CommandWhispererAddInServer Class")
+	]
+	coclass CommandWhispererAddInServer
+	{
+		[default] interface ICommandWhispererAddInServer;
+	};
+};
