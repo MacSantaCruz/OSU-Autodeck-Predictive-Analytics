@@ -7,10 +7,8 @@ import random
 import collections
 import time
 
-# Target log path
-logs_path = '/tmp/tensorflow/rnn_words'
-writer = tf.summary.FileWriter(logs_path)
-
+# Target model chkpt path
+model_path = '/home/mac/Desktop/models/testing.ckpt'
 # Text file containing words for training
 training_file = 'test2_5000_noapp'
 
@@ -93,48 +91,8 @@ init = tf.global_variables_initializer()
 
 saver = tf.train.Saver()
 
-# Launch the graph
 with tf.Session() as session:
-    session.run(init)
-    step = 0
-    offset = random.randint(0,n_input+1)
-    end_offset = n_input + 1
-    acc_total = 0
-    loss_total = 0
-
-    writer.add_graph(session.graph)
-    #saver.restore(session, "/tmp/model.ckpt")
-    while step < training_iters:
-        # Generate a minibatch. Add some randomness on selection process.
-        if offset > (len(training_data)-end_offset):
-            offset = random.randint(0, n_input+1)
-
-        symbols_in_keys = [ [dictionary[ str(training_data[i])]] for i in range(offset, offset+n_input) ]
-        symbols_in_keys = np.reshape(np.array(symbols_in_keys), [-1, n_input, 1])
-
-        symbols_out_onehot = np.zeros([vocab_size], dtype=float)
-        symbols_out_onehot[dictionary[str(training_data[offset+n_input])]] = 1.0
-        symbols_out_onehot = np.reshape(symbols_out_onehot,[1,-1])
-
-        _, acc, loss, onehot_pred = session.run([optimizer, accuracy, cost, pred], \
-                                                feed_dict={x: symbols_in_keys, y: symbols_out_onehot})
-        loss_total += loss
-        acc_total += acc
-        if (step+1) % display_step == 0:
-            print("Iter= " + str(step+1) + ", Average Loss= " + \
-                  "{:.6f}".format(loss_total/display_step) + ", Average Accuracy= " + \
-                  "{:.2f}%".format(100*acc_total/display_step))
-            if 100*acc_total/display_step > 95:
-                step = training_iters
-            acc_total = 0
-            loss_total = 0
-            symbols_in = [training_data[i] for i in range(offset, offset + n_input)]
-            symbols_out = training_data[offset + n_input]
-            symbols_out_pred = reverse_dictionary[int(tf.argmax(onehot_pred, 1).eval())]
-            print("%s - [%s] vs [%s]" % (symbols_in,symbols_out,symbols_out_pred))
-        step += 1
-        offset += (n_input+1)
-    save_path = saver.save(session, "/tmp/testing.ckpt")
+    saver.restore(session, model_path)
     while True:
         prompt = "%s words: " % n_input
         sentence = input(prompt)

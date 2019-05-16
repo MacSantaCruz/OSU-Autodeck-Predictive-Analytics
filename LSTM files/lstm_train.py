@@ -9,6 +9,7 @@ import time
 
 # Target log path
 logs_path = '/tmp/tensorflow/rnn_words'
+model_path = '/home/mac/Desktop/models/testing.ckpt'
 writer = tf.summary.FileWriter(logs_path)
 
 # Text file containing words for training
@@ -103,7 +104,7 @@ with tf.Session() as session:
     loss_total = 0
 
     writer.add_graph(session.graph)
-    #saver.restore(session, "/tmp/model.ckpt")
+
     while step < training_iters:
         # Generate a minibatch. Add some randomness on selection process.
         if offset > (len(training_data)-end_offset):
@@ -134,23 +135,4 @@ with tf.Session() as session:
             print("%s - [%s] vs [%s]" % (symbols_in,symbols_out,symbols_out_pred))
         step += 1
         offset += (n_input+1)
-    save_path = saver.save(session, "/tmp/testing.ckpt")
-    while True:
-        prompt = "%s words: " % n_input
-        sentence = input(prompt)
-        sentence = sentence.strip()
-        words = sentence.split(' ')
-        if len(words) != n_input:
-            continue
-        try:
-            symbols_in_keys = [dictionary[str(words[i])] for i in range(len(words))]
-            for i in range(1):
-                keys = np.reshape(np.array(symbols_in_keys), [-1, n_input, 1])
-                onehot_pred = session.run(pred, feed_dict={x: keys})
-                onehot_pred_index = int(tf.argmax(onehot_pred, 1).eval())
-                sentence = "%s %s" % (sentence,reverse_dictionary[onehot_pred_index])
-                symbols_in_keys = symbols_in_keys[1:]
-                symbols_in_keys.append(onehot_pred_index)
-            print(sentence)
-        except:
-            print("Word not in dictionary")
+    save_path = saver.save(session, model_path)
