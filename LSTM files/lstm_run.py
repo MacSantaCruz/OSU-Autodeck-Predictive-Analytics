@@ -35,10 +35,8 @@ dictionary, reverse_dictionary = build_dataset(training_data)
 vocab_size = len(dictionary)
 
 # Parameters
-learning_rate = 0.0001
-training_iters = 50
-display_step = 10
-n_input = 5
+
+n_input = 1
 
 # number of units in RNN cell
 n_hidden = 512
@@ -78,13 +76,7 @@ def RNN(x, weights, biases):
 
 pred = RNN(x, weights, biases)
 
-# Loss and optimizer
-cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(logits=pred, labels=y))
-optimizer = tf.train.RMSPropOptimizer(learning_rate=learning_rate).minimize(cost)
 
-# Model evaluation
-correct_pred = tf.equal(tf.argmax(pred,1), tf.argmax(y,1))
-accuracy = tf.reduce_mean(tf.cast(correct_pred, tf.float32))
 
 # Initializing the variables
 init = tf.global_variables_initializer()
